@@ -3,7 +3,7 @@ import math
 import numpy as np
 import torch
 from torch.nn.utils.parametrize import remove_parametrizations
-
+import TTS
 from TTS.utils.io import load_fsspec
 from TTS.vocoder.layers.parallel_wavegan import ResidualBlock
 from TTS.vocoder.layers.upsample import ConvUpsample
@@ -136,7 +136,7 @@ class ParallelWaveganGenerator(torch.nn.Module):
     def apply_weight_norm(self):
         def _apply_weight_norm(m):
             if isinstance(m, (torch.nn.Conv1d, torch.nn.Conv2d)):
-                torch.nn.utils.parametrizations.weight_norm(m)
+                TTS.utils.norm.weight_norm(m)
                 # print(f"Weight norm is applied to {m}.")
 
         self.apply(_apply_weight_norm)

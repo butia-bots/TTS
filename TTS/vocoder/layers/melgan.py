@@ -1,7 +1,8 @@
 from torch import nn
-from torch.nn.utils.parametrizations import weight_norm
+from TTS.utils.norm import weight_norm
 from torch.nn.utils.parametrize import remove_parametrizations
 
+import TTS
 
 class ResidualStack(nn.Module):
     def __init__(self, channels, num_res_blocks, kernel_size):

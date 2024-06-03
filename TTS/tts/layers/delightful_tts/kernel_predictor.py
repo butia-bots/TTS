@@ -1,6 +1,7 @@
 import torch.nn as nn  # pylint: disable=consider-using-from-import
 from torch.nn.utils import parametrize
 
+import TTS
 
 class KernelPredictor(nn.Module):
     """Kernel predictor for the location-variable convolutions
@@ -37,7 +38,7 @@ class KernelPredictor(nn.Module):
         kpnet_bias_channels = conv_out_channels * conv_layers  # l_b
 
         self.input_conv = nn.Sequential(
-            nn.utils.parametrizations.weight_norm(
+            TTS.utils.norm.weight_norm(
                 nn.Conv1d(cond_channels, kpnet_hidden_channels, 5, padding=2, bias=True)
             ),
             getattr(nn, kpnet_nonlinear_activation)(**kpnet_nonlinear_activation_params),
@@ -49,7 +50,7 @@ class KernelPredictor(nn.Module):
             self.residual_convs.append(
                 nn.Sequential(
                     nn.Dropout(kpnet_dropout),
-                    nn.utils.parametrizations.weight_norm(
+                    TTS.utils.norm.weight_norm(
                         nn.Conv1d(
                             kpnet_hidden_channels,
                             kpnet_hidden_channels,
@@ -59,7 +60,7 @@ class KernelPredictor(nn.Module):
                         )
                     ),
                     getattr(nn, kpnet_nonlinear_activation)(**kpnet_nonlinear_activation_params),
-                    nn.utils.parametrizations.weight_norm(
+                    TTS.utils.norm.weight_norm(
                         nn.Conv1d(
                             kpnet_hidden_channels,
                             kpnet_hidden_channels,
@@ -71,7 +72,7 @@ class KernelPredictor(nn.Module):
                     getattr(nn, kpnet_nonlinear_activation)(**kpnet_nonlinear_activation_params),
                 )
             )
-        self.kernel_conv = nn.utils.parametrizations.weight_norm(
+        self.kernel_conv = TTS.utils.norm.weight_norm(
             nn.Conv1d(
                 kpnet_hidden_channels,
                 kpnet_kernel_channels,
@@ -80,7 +81,7 @@ class KernelPredictor(nn.Module):
                 bias=True,
             )
         )
-        self.bias_conv = nn.utils.parametrizations.weight_norm(
+        self.bias_conv = TTS.utils.norm.weight_norm(
             nn.Conv1d(
                 kpnet_hidden_channels,
                 kpnet_bias_channels,

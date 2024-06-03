@@ -8,9 +8,10 @@ from torch import nn
 from torch.nn import Conv1d, Conv2d, ConvTranspose1d
 from torch.nn import functional as F
 from torch.nn.utils import spectral_norm
-from torch.nn.utils.parametrizations import weight_norm
+from TTS.utils.norm import weight_norm
 from torch.nn.utils.parametrize import remove_parametrizations
 
+import TTS
 import TTS.vc.modules.freevc.commons as commons
 import TTS.vc.modules.freevc.modules as modules
 from TTS.tts.utils.speakers import SpeakerManager

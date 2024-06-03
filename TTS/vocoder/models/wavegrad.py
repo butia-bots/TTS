@@ -5,7 +5,7 @@ import numpy as np
 import torch
 from coqpit import Coqpit
 from torch import nn
-from torch.nn.utils.parametrizations import weight_norm
+from TTS.utils.norm import weight_norm
 from torch.nn.utils.parametrize import remove_parametrizations
 from torch.utils.data import DataLoader
 from torch.utils.data.distributed import DistributedSampler

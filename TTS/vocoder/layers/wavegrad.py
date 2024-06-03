@@ -1,9 +1,9 @@
 import torch
 import torch.nn.functional as F
 from torch import nn
-from torch.nn.utils.parametrizations import weight_norm
+from TTS.utils.norm import weight_norm
 from torch.nn.utils.parametrize import remove_parametrizations
-
+import TTS
 
 class Conv1d(nn.Conv1d):
     def __init__(self, *args, **kwargs):

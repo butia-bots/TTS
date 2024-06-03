@@ -4,6 +4,7 @@ from torch import nn
 from torch.nn import functional as F
 
 from TTS.tts.layers.generic.wavenet import WN
+import TTS
 
 from ..generic.normalization import LayerNorm
 
@@ -186,7 +187,7 @@ class CouplingBlock(nn.Module):
         self.sigmoid_scale = sigmoid_scale
         # input layer
         start = torch.nn.Conv1d(in_channels // 2, hidden_channels, 1)
-        start = torch.nn.utils.parametrizations.weight_norm(start)
+        start = TTS.utils.norm.weight_norm(start)
         self.start = start
         # output layer
         # Initializing last layer to 0 makes the affine coupling layers

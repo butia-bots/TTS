@@ -5,7 +5,7 @@ from torch import nn
 from torch.nn.utils.parametrize import remove_parametrizations
 
 from TTS.vocoder.layers.parallel_wavegan import ResidualBlock
-
+import TTS
 
 class ParallelWaveganDiscriminator(nn.Module):
     """PWGAN discriminator as in https://arxiv.org/abs/1910.11480.
@@ -69,7 +69,7 @@ class ParallelWaveganDiscriminator(nn.Module):
     def apply_weight_norm(self):
         def _apply_weight_norm(m):
             if isinstance(m, (torch.nn.Conv1d, torch.nn.Conv2d)):
-                torch.nn.utils.parametrizations.weight_norm(m)
+                TTS.utils.norm.weight_norm(m)
 
         self.apply(_apply_weight_norm)
 
@@ -172,7 +172,7 @@ class ResidualParallelWaveganDiscriminator(nn.Module):
     def apply_weight_norm(self):
         def _apply_weight_norm(m):
             if isinstance(m, (torch.nn.Conv1d, torch.nn.Conv2d)):
-                torch.nn.utils.parametrizations.weight_norm(m)
+                TTS.utils.norm.weight_norm(m)
 
         self.apply(_apply_weight_norm)
 

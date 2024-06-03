@@ -5,6 +5,7 @@ import torch.nn as nn  # pylint: disable=consider-using-from-import
 import torch.nn.functional as F
 from torch.nn.utils import parametrize
 
+import TTS
 from TTS.tts.layers.delightful_tts.kernel_predictor import KernelPredictor
 
 
@@ -74,7 +75,7 @@ class ConvNorm(nn.Module):
         )
         nn.init.xavier_uniform_(self.conv.weight, gain=nn.init.calculate_gain(w_init_gain))
         if self.use_weight_norm:
-            self.conv = nn.utils.parametrizations.weight_norm(self.conv)
+            self.conv = TTS.utils.norm.weight_norm(self.conv)
 
     def forward(self, signal, mask=None):
         conv_signal = self.conv(signal)
@@ -114,7 +115,7 @@ class ConvLSTMLinear(nn.Module):
                 dilation=1,
                 w_init_gain="relu",
             )
-            conv_layer = nn.utils.parametrizations.weight_norm(conv_layer.conv, name="weight")
+            conv_layer = TTS.utils.norm.weight_norm(conv_layer.conv, name="weight")
             convolutions.append(conv_layer)
 
         self.convolutions = nn.ModuleList(convolutions)
@@ -568,7 +569,7 @@ class LVCBlock(torch.nn.Module):
 
         self.convt_pre = nn.Sequential(
             nn.LeakyReLU(lReLU_slope),
-            nn.utils.parametrizations.weight_norm(
+            TTS.utils.norm.weight_norm(
                 nn.ConvTranspose1d(
                     in_channels,
                     in_channels,
@@ -585,7 +586,7 @@ class LVCBlock(torch.nn.Module):
             self.conv_blocks.append(
                 nn.Sequential(
                     nn.LeakyReLU(lReLU_slope),
-                    nn.utils.parametrizations.weight_norm(
+                    TTS.utils.norm.weight_norm(
                         nn.Conv1d(
                             in_channels,
                             in_channels,

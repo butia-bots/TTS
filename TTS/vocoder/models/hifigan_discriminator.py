@@ -2,6 +2,7 @@
 import torch
 from torch import nn
 from torch.nn import functional as F
+import TTS
 
 LRELU_SLOPE = 0.1
 
@@ -30,7 +31,7 @@ class DiscriminatorP(torch.nn.Module):
         super().__init__()
         self.period = period
         get_padding = lambda k, d: int((k * d - d) / 2)
-        norm_f = nn.utils.spectral_norm if use_spectral_norm else nn.utils.parametrizations.weight_norm
+        norm_f = nn.utils.spectral_norm if use_spectral_norm else TTS.utils.norm.weight_norm
         self.convs = nn.ModuleList(
             [
                 norm_f(nn.Conv2d(1, 32, (kernel_size, 1), (stride, 1), padding=(get_padding(kernel_size, 1), 0))),
@@ -125,7 +126,7 @@ class DiscriminatorS(torch.nn.Module):
 
     def __init__(self, use_spectral_norm=False):
         super().__init__()
-        norm_f = nn.utils.spectral_norm if use_spectral_norm else nn.utils.parametrizations.weight_norm
+        norm_f = nn.utils.spectral_norm if use_spectral_norm else TTS.utils.norm.weight_norm
         self.convs = nn.ModuleList(
             [
                 norm_f(nn.Conv1d(1, 128, 15, 1, padding=7)),

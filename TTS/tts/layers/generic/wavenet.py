@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 from torch.nn.utils import parametrize
-
+import TTS
 
 @torch.jit.script
 def fused_add_tanh_sigmoid_multiply(input_a, input_b, n_channels):
@@ -63,7 +63,7 @@ class WN(torch.nn.Module):
         # init conditioning layer
         if c_in_channels > 0:
             cond_layer = torch.nn.Conv1d(c_in_channels, 2 * hidden_channels * num_layers, 1)
-            self.cond_layer = torch.nn.utils.parametrizations.weight_norm(cond_layer, name="weight")
+            self.cond_layer = TTS.utils.norm.weight_norm(cond_layer, name="weight")
         # intermediate layers
         for i in range(num_layers):
             dilation = dilation_rate**i
@@ -76,7 +76,7 @@ class WN(torch.nn.Module):
                 in_layer = torch.nn.Conv1d(
                     hidden_channels, 2 * hidden_channels, kernel_size, dilation=dilation, padding=padding
                 )
-            in_layer = torch.nn.utils.parametrizations.weight_norm(in_layer, name="weight")
+            in_layer = TTS.utils.norm.weight_norm(in_layer, name="weight")
             self.in_layers.append(in_layer)
 
             if i < num_layers - 1:
@@ -85,7 +85,7 @@ class WN(torch.nn.Module):
                 res_skip_channels = hidden_channels
 
             res_skip_layer = torch.nn.Conv1d(hidden_channels, res_skip_channels, 1)
-            res_skip_layer = torch.nn.utils.parametrizations.weight_norm(res_skip_layer, name="weight")
+            res_skip_layer = TTS.utils.norm.weight_norm(res_skip_layer, name="weight")
             self.res_skip_layers.append(res_skip_layer)
         # setup weight norm
         if not weight_norm:

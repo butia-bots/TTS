@@ -1,7 +1,7 @@
 import numpy as np
 from torch import nn
-from torch.nn.utils.parametrizations import weight_norm
-
+from TTS.utils.norm import weight_norm
+import TTS
 
 class MelganDiscriminator(nn.Module):
     def __init__(

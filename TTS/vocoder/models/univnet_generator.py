@@ -4,7 +4,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 from torch.nn.utils import parametrize
-
+import TTS
 from TTS.vocoder.layers.lvc_block import LVCBlock
 
 LRELU_SLOPE = 0.1
@@ -125,7 +125,7 @@ class UnivnetGenerator(torch.nn.Module):
 
         def _apply_weight_norm(m):
             if isinstance(m, (torch.nn.Conv1d, torch.nn.Conv2d)):
-                torch.nn.utils.parametrizations.weight_norm(m)
+                TTS.utils.norm.weight_norm(m)
                 # print(f"Weight norm is applied to {m}.")
 
         self.apply(_apply_weight_norm)
